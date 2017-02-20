@@ -1,9 +1,9 @@
-448f1af240ba3dbe2981f4e55b38a879 *DESCRIPTION
+f3b02e694385732307110ae47f8d249f *DESCRIPTION
 6ad00a59cf85acd1448f7eb42f6c345f *NAMESPACE
 b8620a417b615bed688e1e9c767a97dd *R/KWTraits.R
 30707406f66a29979eb71c20e8e07c97 *R/calc_metrics.R
 b572d5f82fb8b14123718ccf55923feb *R/create_ecospace.R
-0903013e193728b3a812b52f0acce735 *R/ecospace.R
+2c40403bb88109dc78324bdfc823db61 *R/ecospace.R
 37b111c2fed61f61e920520e0da59cd1 *R/expansion.R
 f0de0642546bd59aa16d91db9f7e49d4 *R/neutral.R
 7ceed8839c4b954f07c8a3b2adfea847 *R/partitioning.R
@@ -12,11 +12,16 @@ f0de0642546bd59aa16d91db9f7e49d4 *R/neutral.R
 042156f73184f5da0b90e967140a830a *R/redundancy.R
 44d7d83702cba12c8a565538f81b402a *R/sample2.R
 a8beaf2dc35a46451e9c26b3d6b5d81a *R/unique2.R
+aaa96d694de2a652c04bcc8aa0b92bb4 *build/vignette.rds
 d7160611d80032f31829f9da46751424 *data/KWTraits.rda
+1b611fb77f44ff7a561136c83a87826d *inst/NEWS.Rd
+05f425ebdb4e48a47ef3e64938bd6174 *inst/doc/ecospace.R
+74f22f0c16633a340effcec30e6406b6 *inst/doc/ecospace.Rmd
+15b8f5dfb5b53b924afc24130c4f86c8 *inst/doc/ecospace.html
 f7281a98dbc45b818e5233cf4394c8f4 *man/KWTraits.Rd
 d9e7e7ee2c08126e9bc88b936d98629d *man/calc_metrics.Rd
 dd168dcab476d1804c75d950cb108a16 *man/create_ecospace.Rd
-cc735c90f22d4c06244d6b79b8b07cb5 *man/ecospace-package.Rd
+3a66a68475e51d9f0835fe2c405938ed *man/ecospace-package.Rd
 0ab58d95ba4c6dfe5138c00584e9f898 *man/expansion.Rd
 e168f1dafc168bbd666a775ab2ffb923 *man/neutral.Rd
 5b2feae9f16f61a98cb53ace27e4739a *man/partitioning.Rd
@@ -25,3 +30,4 @@ d999d3bd8a51e17704955a6eac9f7d9e *man/prep_data.Rd
 3a57ab348f4a3494985d3e8ffc87c8f1 *man/redundancy.Rd
 5f2346f223814b23809dec17bb7ac8fb *man/sample2.Rd
 16f2e3a19d481c9f96718f9fcbab974c *man/unique2.Rd
+74f22f0c16633a340effcec30e6406b6 *vignettes/ecospace.Rmd
