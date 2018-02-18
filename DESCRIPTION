@@ -2,9 +2,9 @@ Package: ecospace
 Type: Package
 Title: Simulating Community Assembly and Ecological Diversification
         Using Ecospace Frameworks
-Version: 1.2.1
-Date: 2017-11-05
-Depends: R (>= 3.3.1)
+Version: 1.2.3
+Date: 2018-01-17
+Depends: R (>= 3.4.0)
 Imports: FD (>= 1.0-12)
 Authors@R: person("Phil", "Novack-Gottshall", email = "pnovack-gottshall@ben.edu",
      role = c("aut", "cre"))
@@ -23,7 +23,7 @@ RoxygenNote: 6.0.1
 Suggests: knitr, rmarkdown, vegan
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2017-11-05 16:51:27 UTC; pnovack-gottshall
+Packaged: 2018-02-18 18:28:36 UTC; pnovack-gottshall
 Author: Phil Novack-Gottshall [aut, cre]
 Repository: CRAN
-Date/Publication: 2017-11-05 17:09:39 UTC
+Date/Publication: 2018-02-18 21:09:27 UTC

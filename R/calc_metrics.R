@@ -251,6 +251,7 @@
 #' identical(tail(metrics, 1), metrics2) # These are identical
 #'
 #'
+#' \dontrun{
 #' # Can take a few minutes to run to completion
 #' # Calculate for 5 samples
 #' nreps <- 1:5
@@ -258,6 +259,7 @@
 #' metrics <- lapply(X=nreps, FUN=calc_metrics, samples=samples, Model="Neutral", Param="NA")
 #' alarm()
 #' str(metrics)
+#' }
 #'@export
 calc_metrics <- function(nreps=1, samples=NA, Smax=NA, Model="", Param="", m=3, corr="lingoes", method="Euclidean", increm = TRUE) {
   if(is.logical(samples)) stop("you must provide a list of samples to calculate\n")
@@ -268,7 +270,8 @@ calc_metrics <- function(nreps=1, samples=NA, Smax=NA, Model="", Param="", m=3, 
   if(!is.numeric(Smax)) ns <- nrow(sample) else ns <- Smax
   if(increm) Smin <- 1 else Smin <- ns
   if(method != "Euclidean" | any(sapply(sample, data.class) == "factor") | any(sapply(sample, data.class) == "ordered")) method <- "Gower"
-  setwd(tempdir())     # Specify the pre-built (and CPU-process unique) temp directory for storage of vert.txt temp files for convex hull calculations
+  odir <- setwd(tempdir())     # Specify the pre-built (and CPU-process unique) temp directory for storage of vert.txt temp files for convex hull calculations
+  on.exit(setwd(odir))
   sam.out <- data.frame(Model=Model, Param=Param, S=numeric(ns), H=numeric(ns), D=numeric(ns), M=numeric(ns), V=numeric(ns), FRic=numeric(ns), FEve=numeric(ns), FDiv=numeric(ns), FDis=numeric(ns), qual.FRic=numeric(ns))
   for (s in Smin:ns) {
     sam <- sample[1:s,]
@@ -290,7 +293,7 @@ calc_metrics <- function(nreps=1, samples=NA, Smax=NA, Model="", Param="", m=3, 
       if(!is.null(FD$FDiv)) sam.out$FDiv[s] <- FD$FDiv else sam.out$FDiv[s] <- NA
       sam.out$FDiv[s] <- FD$FDiv
     }
-  if(!increm) sam.out <- sam.out[s, ]
   }
+  if(!increm) sam.out <- sam.out[s, ]
   return(sam.out)
 }
