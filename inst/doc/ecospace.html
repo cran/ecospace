@@ -12,7 +12,7 @@
 
 <meta name="author" content="Phil Novack-Gottshall" />
 
-<meta name="date" content="2018-02-18" />
+<meta name="date" content="2018-03-05" />
 
 <title>ecospace: Simulating Community Assembly and Ecological Diversification Using Ecospace Frameworks</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">ecospace: Simulating Community Assembly and Ecological Diversification Using Ecospace Frameworks</h1>
 <h4 class="author"><em>Phil Novack-Gottshall</em></h4>
-<h4 class="date"><em>2018-02-18</em></h4>
+<h4 class="date"><em>2018-03-05</em></h4>
 
 
 
@@ -236,7 +236,7 @@ leg.pch &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv"
 <h2>Calculate ecological disparity (functional diversity) metrics</h2>
 <p>The package wraps around dbFD() in package FD to calculate common ecological disparity and functional diversity statistics. Statistics are calculated incrementally so dynamics can be understood as a function of species richness. See ?calc_metrics for explanation of each statistic.</p>
 <p>(Note: warnings are turned off in this vignette, caused by attempting to calculate the total variance (V) on factor characters.)</p>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD Several users have requested changes to calc_metrics() to allow simple statistical calculation for the entire sample (instead of doing so incrementally). Starting with version 1.2.1, the argument increm=FALSE allows this functionality. =======</p>
+<p>Several users have requested changes to calc_metrics() to allow simple statistical calculation for the entire sample (instead of doing so incrementally). Starting with version 1.2.1, the argument increm=FALSE allows this functionality.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Using Smax=10 here to illustrate calculation for first 25 species in neutral assemblage</span>
 <span class="kw">options</span>(<span class="dt">warn =</span> <span class="op">-</span><span class="dv">1</span>)
 metrics &lt;-<span class="st"> </span><span class="kw">calc_metrics</span>(<span class="dt">samples=</span>neutral_sample, <span class="dt">Smax=</span><span class="dv">10</span>, <span class="dt">Model=</span><span class="st">&quot;Neutral&quot;</span>)
@@ -263,21 +263,6 @@ metrics</code></pre></div>
 ## 8  0.8128629 0.3138985 0.8224502
 ## 9  0.8668060 0.3138736 0.6489874
 ## 10 0.8152025 0.3229843 0.6164307</code></pre>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>fb78539b6ef6e9b01df7470cc5e3d0445d767e2c</p>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
-</blockquote>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Calculate statistics for just the entire sample</span>
 <span class="kw">options</span>(<span class="dt">warn =</span> <span class="op">-</span><span class="dv">1</span>)
 metrics &lt;-<span class="st"> </span><span class="kw">calc_metrics</span>(<span class="dt">samples=</span>neutral_sample, <span class="dt">increm=</span><span class="ot">FALSE</span>)
@@ -286,7 +271,7 @@ metrics</code></pre></div>
 ## 50             50 50 0.4408858 0.8888889 NA 0.1936463 0.9961949 0.768834
 ##         FDis qual.FRic
 ## 50 0.3196247 0.2027004</code></pre>
-<p>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD The more typical use of calc_metrics() is to calculate statistics incrementally (which is the default behavior).</p>
+<p>The more typical use of calc_metrics() is to calculate statistics incrementally (which is the default behavior).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Using Smax=10 here to illustrate calculation for first 10 species in neutral assemblage</span>
 <span class="kw">options</span>(<span class="dt">warn =</span> <span class="op">-</span><span class="dv">1</span>)
 metrics &lt;-<span class="st"> </span><span class="kw">calc_metrics</span>(<span class="dt">samples=</span>neutral_sample, <span class="dt">Smax=</span><span class="dv">10</span>, <span class="dt">Model=</span><span class="st">&quot;Neutral&quot;</span>, <span class="dt">increm=</span><span class="ot">TRUE</span>)
@@ -313,7 +298,7 @@ metrics</code></pre></div>
 ## 8  0.8128629 0.3138985 0.8224502
 ## 9  0.8668060 0.3138736 0.6489874
 ## 10 0.8152025 0.3229843 0.6164307</code></pre>
-<p>======= &gt;&gt;&gt;&gt;&gt;&gt;&gt; fb78539b6ef6e9b01df7470cc5e3d0445d767e2c The functions are written so they can be run ‘in parallel’. Although not run here, the following provides an example of how this can be implemented using lapply(), here building 25 ‘neutral’ samples of 20 species each and then calculating disparity metrics on each.</p>
+<p>The functions are written so they can be run ‘in parallel’. Although not run here, the following provides an example of how this can be implemented using lapply(), here building 25 ‘neutral’ samples of 20 species each and then calculating disparity metrics on each.</p>
 <p>Note the code will take a few seconds to run to completion.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">nreps &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">25</span> <span class="co"># A sequence of the samples to be simulated</span>
 n.samples &lt;-<span class="st"> </span><span class="kw">lapply</span>(<span class="dt">X=</span>nreps, <span class="dt">FUN=</span>neutral, <span class="dt">Sseed=</span><span class="dv">3</span>, <span class="dt">Smax=</span><span class="dv">20</span>, ecospace)
