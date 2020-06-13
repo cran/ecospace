@@ -4,20 +4,22 @@
 #'Wrapper to \code{FD::\link[FD]{dbFD}} that calculates common ecological
 #'disparity and functional diversity statistics. When used with species-wise
 #'simulations of community assembly or ecological diversification (and default
-#'\code{increm='TRUE'}), calculates statistical dynamics incrementally as a
+#'\code{increm = 'TRUE'}), calculates statistical dynamics incrementally as a
 #'function of species richness. Avoids file-sharing errors so that can be used
 #'in 'embarrasingly parallel' implementations in a high-performance computing
 #'environment.
 #'
 #'@param nreps Sample number to calculate statistics for. Default is the first
-#'  sample \code{nreps=1}, but statistics can be calculated for other samples
-#'  (i.e., second sample if \code{nreps=2}), or multiple samples if assigned a
+#'  sample \code{nreps = 1}, but statistics can be calculated for other samples
+#'  (i.e., second sample if \code{nreps = 2}), or multiple samples if assigned a
 #'  vector (sequence) of integers and function is applied within \code{lapply}
 #'  or related function.
-#'@param samples Data frame (if \code{nreps=1}) or list of data frames (if
-#'  \code{nreps=seq()} or \code{nreps!=1}), with each data frame a
+#'@param samples Data frame (if \code{nreps = 1}) or list of data frames (if
+#'  \code{nreps = seq()} or \code{nreps! = 1}), with each data frame a
 #'  species-by-trait matrix with species as rows and traits as columns. Traits
 #'  can be binary, numeric, ordered numeric, factor, or ordered factor types.
+#'  Each sample is converted to a distance metric (see \code{method} below)
+#'  before calculating statistics.
 #'@param Smax Maximum number of \code{samples} rows (species) to include in
 #'  calculations, incremented starting with first row. Default (\code{NA}) is to
 #'  increment to the maximum number of \code{samples} rows (calculated
@@ -29,22 +31,30 @@
 #'@param Param Optional numeric value or character string naming strength
 #'  parameter used in simulation. A warning issues if left blank.
 #'@param m The number of PCoA axes to keep as 'traits' for calculating FRic and
-#'  FDiv in \code{FD::\link[FD]{dbFD}}. Default \code{m=3} is justified below,
-#'  but any integer value grater than 1 is possible. See 'details' for more
+#'  FDiv in \code{FD::\link[FD]{dbFD}}. Default \code{m = 3} is justified below,
+#'  but any integer value greater than 1 is possible. See 'details' for more
 #'  information.
 #'@param corr Character string specifying the correction method to use in
 #'  \code{FD::\link[FD]{dbFD}} when the species-by-species distance matrix
-#'  cannot be represented in a Euclidean space. Default \code{corr='lingoes'} is
+#'  cannot be represented in a Euclidean space. Default \code{corr = 'lingoes'} is
 #'  justified below, but see \code{FD::\link[FD]{dbFD}} for other possible
 #'  values.
 #'@param method Distance measure to use when calculating functional distances
-#'  between species. Default is \code{method='Euclidean'} using
-#'  \code{stats::\link[stats]{dist}}. \code{method='Gower'} or any other value
+#'  between species. Default is \code{method = 'Euclidean'} using
+#'  \code{stats::\link[stats]{dist}}. \code{method = 'Gower'} or any other value
 #'  uses Gower distance (using \code{FD::\link[FD]{gowdis}}). Presence of factor
-#'  or ordered factor character types forces use of Gower distance.
-#'@param increm Default \code{increm='TRUE'} calculates statistics incrementally
-#'  as a function of species richness. \code{increm='FALSE'} only calculates a
+#'  or ordered factor character types forces use of Gower distance, triggering a
+#'  warning to notify user when changed internally.
+#'@param increm Default \code{increm = 'TRUE'} calculates statistics incrementally
+#'  as a function of species richness. \code{increm = 'FALSE'} only calculates a
 #'  single set of statistics for the entire sample.
+#'@param ... Additional parameters for controlling \code{FD::\link[FD]{dbFD}}.
+#'  Common uses include setting \code{calc.FRic = FALSE} or \code{calc.FDiv = FALSE}
+#'  to exclude calculation of FRic and FDiv. Note that the arguments \code{m},
+#'  \code{corr}, and \code{method} above have different defaults than used in
+#'  \code{FD::\link[FD]{dbFD}}, and \code{w.abun = FALSE} and
+#'  \code{messages = FALSE} are also internally changed to different defaults.
+#'  These and others can be controlled here.
 #'
 #'@details The primary goal of this function is to describe the statistical
 #'  dynamics of common ecological disparity (functional diversity) metrics as a
@@ -75,11 +85,11 @@
 #'
 #'  Statistic (\code{S}) is species (taxonomic) richness, or sample size.
 #'
-#'  When \code{increm='FALSE'}, the function calculates statistics for the
+#'  When \code{increm = 'FALSE'}, the function calculates statistics for the
 #'  entire sample(s) instead of doing so incrementally. In this case, the
 #'  implementation is essentially the same as \code{FD::\link[FD]{dbFD}} with
-#'  default arguments (\code{m, corr}) that reduce common calculation errors,
-#'  plus inclusion of common morphological disparity statistics.
+#'  default arguments (e.g., \code{m, corr}) that reduce common calculation
+#'  errors, plus inclusion of common morphological disparity statistics.
 #'
 #'  \strong{Statistics that measure diversity (unique number of life habits /
 #'  trait combinations within ecospace / functional-trait space):} \describe{
@@ -110,24 +120,31 @@
 #'  minimum-spanning-tree lengths between species in PCoA trait-space.} }
 #'
 #'  The default number of PCoA axes used in calculating of FRic and FDiv equals
-#'  \code{m=3}. Because their calculation requires more species than traits
-#'  (here the \code{m=3} PCoA axes), the four functional diversity statistics
+#'  \code{m = 3}. Because their calculation requires more species than traits
+#'  (here the \code{m = 3} PCoA axes), the four functional diversity statistics
 #'  are only calculated when a calculated sample contains a minimum of \code{m}
-#'  species (S) or unique life habtis (H). \code{qual.FRic} is appended to the
+#'  species (S) or unique life habits (H). \code{qual.FRic} is appended to the
 #'  output to record the proportion ('quality') of PCoA space retained by this
-#'  loss of dimenstionality. Although including more PCoA axes allows greater
+#'  loss of dimensionality. Although including more PCoA axes allows greater
 #'  statistical power (Villeger et al. 2011, Maire et al. 2015), the use of
-#'  \code{m=3} here is computationally manageable, ecologically meaningful, and
+#'  \code{m = 3} here is computationally manageable, ecologically meaningful, and
 #'  allows standardized measurement of statistical dynamics across the wide
 #'  range of sample sizes typically involved in simulations of
 #'  ecological/evolutionary assemblages, especially when functionally redundant
 #'  data occur. Other integers greater than 1 can also be specified. See the
 #'  help file for \code{FD::\link[FD]{dbFD}} for additional information.
 #'
-#'  Lingoes correction \code{corr='lingoes'}, as recommended by Legendre and
+#'  Lingoes correction \code{corr = 'lingoes'}, as recommended by Legendre and
 #'  Anderson (1999), is called when the species-by-species distance matrix
 #'  cannot be represented in a Euclidean space. See the help file for
 #'  \code{FD::\link[FD]{dbFD}} for additional information.
+#'
+#'  Note that the ecological disparity statistics are calculated on the raw
+#'  (unstandardized) distance matrix. The functional diversity statistics are
+#'  calculated on standardized data using standardizations in
+#'  \code{FD::\link[FD]{dbFD}}. If all traits are numeric, they by default are
+#'  standardized to mean 0 and unit variance. If not all traits are numeric,
+#'  Gower's (1971) standardization by the range is automatically used.
 #'
 #'@return Returns a data frame (if \code{nreps} is a single integer or
 #'  \code{samples} is a single data frame) or a list of data frames. Each
@@ -150,12 +167,12 @@
 #'  species. The nature of the bug is under investigation, but the current
 #'  implementation is reliable under most uses. If you run into problems because
 #'  of this bug, a work-around is to manually change the function to call
-#'  \code{cluster::\link[cluster]{daisy}} using \code{metric="gower"} instead.
+#'  \code{cluster::\link[cluster]{daisy}} using \code{metric = "gower"} instead.
 #'
 #'  If calculating statistics for more than several hundred samples, it is
 #'  recommended to use a parallel-computing environment. The function has been
 #'  written to allow usage (using \code{\link{lapply}} or some other list-apply
-#'  function) in 'embarrasingly parallel' implementations in such HPC
+#'  function) in 'embarrassingly parallel' implementations in such HPC
 #'  environments. Most importantly, overwriting errors during calculation of
 #'  convex hull volume in FRic are avoided by creating CPU-specific temporarily
 #'  stored vertices files.
@@ -174,6 +191,8 @@
 #'  27(4):695-715.
 #'@references Foote, M. 1993. Discordance and concordance between morphological
 #'  and taxonomic diversity. \emph{Paleobiology} 19:185-204.
+#'@references Gower, J. C. 1971. A general coefficient of similarity and some of
+#'  its properties. \emph{Biometrics} 27:857-871.
 #'@references Laliberte, E., and P. Legendre. 2010. A distance-based framework
 #'  for measuring functional diversity from multiple traits. \emph{Ecology}
 #'  91(1):299-305.
@@ -226,46 +245,53 @@
 #'
 #' @examples
 #' # Build ecospace framework and a random 50-species sample using neutral rule:
-#' ecospace <- create_ecospace(nchar=15, char.state=rep(3, 15), char.type=rep("numeric", 15))
-#' sample <- neutral(Sseed=5, Smax=50, ecospace=ecospace)
-#' # Using Smax=10 here for fast example
-#' metrics <- calc_metrics(samples=sample, Smax=10, Model="Neutral", Param="NA")
+#' ecospace <- create_ecospace(nchar = 15, char.state = rep(3, 15), char.type = rep("numeric", 15))
+#' sample <- neutral(Sseed = 5, Smax = 50, ecospace = ecospace)
+#' # Using Smax = 10 here for fast example
+#' metrics <- calc_metrics(samples = sample, Smax = 10, Model = "Neutral", Param = "NA")
 #' metrics
 #'
 #' # Plot statistical dynamics as function of species richness
 #' op <- par()
-#' par(mfrow=c(2,4), mar=c(4, 4, 1, .3))
+#' par(mfrow = c(2,4), mar = c(4, 4, 1, .3))
 #' attach(metrics)
-#' plot(S, H, type="l", cex=.5)
-#' plot(S, D, type="l", cex=.5)
-#' plot(S, M, type="l", cex=.5)
-#' plot(S, V, type="l", cex=.5)
-#' plot(S, FRic, type="l", cex=.5)
-#' plot(S, FEve, type="l", cex=.5)
-#' plot(S, FDiv, type="l", cex=.5)
-#' plot(S, FDis, type="l", cex=.5)
+#' plot(S, H, type = "l", cex = .5)
+#' plot(S, D, type = "l", cex = .5)
+#' plot(S, M, type = "l", cex = .5)
+#' plot(S, V, type = "l", cex = .5)
+#' plot(S, FRic, type = "l", cex = .5)
+#' plot(S, FEve, type = "l", cex = .5)
+#' plot(S, FDiv, type = "l", cex = .5)
+#' plot(S, FDis, type = "l", cex = .5)
 #'
 #' par(op)
 #'
 #' # Argument 'increm' switches between incremental and entire-sample calculation
-#' metrics2 <- calc_metrics(samples=sample, Smax=10, Model="Neutral", Param="NA", increm=FALSE)
+#' metrics2 <- calc_metrics(samples = sample, Smax = 10, Model = "Neutral",
+#'                          Param = "NA", increm = FALSE)
 #' metrics2
 #' identical(tail(metrics, 1), metrics2) # These are identical
 #'
+#' # ... can further control 'FD::dbFD', here turning off calculation of FRic and FDiv
+#' metrics3 <- calc_metrics(samples = sample, Smax = 10, Model = "Neutral",
+#'                          Param = "NA", calc.FRic = FALSE, calc.FDiv = FALSE)
+#' metrics3
+#' rbind(metrics[10, ], metrics3[10, ])
 #'
 #' \dontrun{
 #' # Can take a few minutes to run to completion
 #' # Calculate for 5 samples
 #' nreps <- 1:5
-#' samples <- lapply(X=nreps, FUN=neutral, Sseed=5, Smax=50, ecospace)
-#' metrics <- lapply(X=nreps, FUN=calc_metrics, samples=samples, Model="Neutral", Param="NA")
+#' samples <- lapply(X = nreps, FUN = neutral, Sseed = 5, Smax = 50, ecospace)
+#' metrics <- lapply(X = nreps, FUN = calc_metrics, samples = samples,
+#'                   Model = "Neutral", Param = "NA")
 #' alarm()
 #' str(metrics)
 #' }
 #'@export
 calc_metrics <-
-  function(nreps = 1, samples = NA, Smax = NA, Model = "", Param = "",
-           m = 3, corr = "lingoes", method = "Euclidean", increm = TRUE) {
+  function(nreps = 1, samples = NA, Smax = NA, Model = "", Param = "", m = 3,
+           corr = "lingoes", method = "Euclidean", increm = TRUE, ...) {
     if (is.logical(samples))
       stop("you must provide a list of samples to calculate\n")
     if (is.data.frame(samples)) {
@@ -274,18 +300,18 @@ calc_metrics <-
       sample <- samples[[nreps]]
     }
     if (!is.data.frame(sample))
-      stop("samples is not a data frame or list of data frames\n.")
+      stop("samples is not a data frame or list of data frames.")
     if (Model == "")
-      warning("you did not specify a model name. Model will be left empty.\n")
+      warning("you did not specify a model name. Model will be left empty.")
     if (Param == "")
-      warning("you did not specify a parameter value. Param will be left empty.\n")
+      warning("you did not specify a parameter value. Param will be left empty.")
     if (!is.numeric(Smax)) {
       ns <- nrow(sample)
     } else {
       ns <- Smax
       if (ns < Smax) {
         warning("Smax specified is greater than sample size. Calculation
-              stopped prematurely when reached complete sample size.\n")
+              stopped prematurely when reached complete sample size.")
       }
     }
     if (increm) {
@@ -295,11 +321,28 @@ calc_metrics <-
     }
     if (method != "Euclidean" |
         any(sapply(sample, data.class) == "factor") |
-        any(sapply(sample, data.class) == "ordered"))
+        any(sapply(sample, data.class) == "ordered")) {
       method <- "Gower"
+      warning("'sample' converted to distance matrix using Gower distance.")
+    }
     odir <-
       setwd(tempdir())     # Specify the pre-built (and CPU-process unique) temp directory for storage of vert.txt temp files for convex hull calculations
     on.exit(setwd(odir))
+    # Modify arguments used in 'FD::dbFD':
+    dots <- list(...)
+    dot.names <- names(dots)
+    args <- formals(dbFD)
+    arg.names <- names(args)
+    mod.arg <- match(dot.names, arg.names)
+    if (any(is.na(mod.arg)))
+      stop("'...' specifies arguments that are not arguments to 'FD::dbFD'")
+    args$m <- m
+    args$w.abun <- FALSE
+    args$messages <- FALSE
+    args$corr <- corr
+    for (a in 1:length(mod.arg)) {
+      args[mod.arg[a]] <- dots[a]
+    }
     sam.out <-
       data.frame(Model = Model, Param = Param, S = numeric(ns),
         H = numeric(ns), D = numeric(ns), M = numeric(ns), V = numeric(ns),
@@ -322,18 +365,18 @@ calc_metrics <-
       sam.out$V[s] <- sqrt(sum(apply(sam, 2, var, na.rm = TRUE)))
       if (s <= m | H <= m)
         next
-      FD <-
-        FD::dbFD(dist, m = m, w.abun = FALSE, messages = FALSE, corr = corr)
+      args$x <- dist
+      FD <- do.call("dbFD", args = args)
       sam.out$FDis[s] <- FD$FDis
       sam.out$FEve[s] <- FD$FEve
+      sam.out$FRic[s] <- NA
+      sam.out$qual.FRic[s] <- NA
+      sam.out$FDiv[s] <- NA
       if (!is.null(FD$FRic)) {
         sam.out$FRic[s] <- FD$FRic
         sam.out$qual.FRic[s] <- FD$qual.FRic
-        if (!is.null(FD$FDiv)) {
-          sam.out$FDiv[s] <- FD$FDiv
-        } else {
-          sam.out$FDiv[s] <- NA
-        }
+      }
+      if (!is.null(FD$FDiv)) {
         sam.out$FDiv[s] <- FD$FDiv
       }
     }

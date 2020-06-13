@@ -4,7 +4,8 @@
 \name{KWTraits}
 \alias{KWTraits}
 \title{Species-by-Trait Matrix for Late Ordovician Marine Fossils.}
-\format{A data frame with 237 rows (taxa) and 40 columns (3 taxonomic
+\format{
+A data frame with 237 rows (taxa) and 40 columns (3 taxonomic
   identifiers and 37 functional traits): \describe{\item{Class}{Taxonomic
   class(character)} \item{Genus}{Taxonomic genus (character)}
   \item{sp.}{Taxonomic species (character)} \item{SEXL}{Sexual reproduction
@@ -48,7 +49,8 @@
   habit} \item{AUTO}{Autotrophic diet} \item{MICR}{Microbivorous (bacteria,
   protists, algae) diet} \item{CARN}{Carnivorous diet} \item{INCP}{Food has
   incorporeal physical condition} \item{PART}{Food consumed as particulate
-  matter} \item{BULK}{Food consumed as bulk matter}}}
+  matter} \item{BULK}{Food consumed as bulk matter}}
+}
 \source{
 Novack-Gottshall, P.M. 2016b. General models of ecological
   diversification. II. Simulations and empirical applications.
@@ -61,23 +63,23 @@ KWTraits
 Sample data set of life habit codings (functional traits) for fossil taxa
 from the Late Ordovician (Type Cincinnatian) Kope and Waynesville Formations
 from Ohio, Indiana, and Kentucky (U.S.A.). The faunal list was compiled from
-the Paleobiololgy Database (\url{paleobiodb.org/}).
+the \href{https://paleobiodb.org/}{Paleobiology Database}.
 }
 \details{
-Binary traits are coded with 0=absent and 1=present. Five ordered
-  numeric traits (body volume, mobility, distance from seafloor
+Binary traits are coded with 0 = absent and 1 = present. Five
+  ordered numeric traits (body volume, mobility, distance from seafloor
   [stratification]) were rescaled to range from 0 to 1 with discrete bins at
   equally spaced intermediate values.
 
   See Novack-Gottshall (2007: especially online Supplementary Appendix A at
-  \url{www.ben.edu/faculty/pnovack-gottshall/2007_Novack-Gottshall_Ecospace.pdf})
-   for definition each functional trait, justifications, explanations, and
-  examples. Novack-Gottshall (2007: Supplementary Appendix B; 2016:
-  Supplementary Appendix A) provides examples of how traits were coded using
-  inferences derived from functional morphology, body size, ichnology,
-  \emph{in situ} preservation, biotic associations recording direct
-  interactions, and interpretation of geographic and depositional environment
-  patterns.
+  \href{https://www.researchgate.net/publication/237375733_Using_a_theoretical_ecospace_to_quantify_the_ecological_diversity_of_Paleozoic_and_modern_marine_biotas}{for
+  reprint}) for definition each functional trait, justifications,
+  explanations, and examples. Novack-Gottshall (2007: Supplementary Appendix
+  B; 2016: Supplementary Appendix A) provides examples of how traits were
+  coded using inferences derived from functional morphology, body size,
+  ichnology, \emph{in situ} preservation, biotic associations recording
+  direct interactions, and interpretation of geographic and depositional
+  environment patterns.
 
   Indeterminate taxa (e.g., trepostome bryozoan indet. or
   \emph{Platystrophia} sp.) that occurred within individual samples within
